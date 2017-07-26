@@ -1,0 +1,2 @@
+https://github.com/liatrio/spring-petclinic.git
+https://github.com/liatrio/dromedary.git
