@@ -1,4 +1,4 @@
-https://github.com/liatrio/libotrio.git#Jenkinsfile
+https://github.com/liatrio/libotrio.git
 https://github.com/liatrio/spring-petclinic.git
-https://github.com/liatrio/game-of-life.git#LDOP-jenkinsfile
-https://github.com/liatrio/joda-time.git#LDOP-jenkinsfile
+https://github.com/liatrio/game-of-life.git
+https://github.com/liatrio/joda-time.git

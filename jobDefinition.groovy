@@ -29,20 +29,16 @@ folder = folder("pipelineJobs") {
 
 def repos = readFileFromWorkspace("repos.txt").split()
 
-repos.each {
-  def jobName = it.split("/")[4].replaceAll(".git", "")
+repos.each { repo->
+  def jobName = repo.split("/")[4].replaceAll(".git", "")
   pipelineJob("pipelineJobs/${jobName}"){
     definition {
       cpsScm {
         scm {
-          git(it, null)
+          git(repo, null)
         }
         scriptPath('Jenkinsfile')
       }
     }
   }
 }
-
-//folder has auth via LDAP
-//folder has shared library (between all jobs)
-//add README.md
