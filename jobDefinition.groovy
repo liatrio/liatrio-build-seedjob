@@ -31,11 +31,17 @@ def repos = readFileFromWorkspace("repos.txt").split()
 
 repos.each { repo->
   def jobName = repo.split("/")[4].replaceAll(".git", "")
+  def branch = repo.split("/")[5]
   pipelineJob("pipelineJobs/${jobName}"){
     definition {
       cpsScm {
         scm {
-          git(repo, null)
+          git{
+            remote {
+              url(repo)
+            }
+            branch(branch)
+          }
         }
         scriptPath('Jenkinsfile')
       }
