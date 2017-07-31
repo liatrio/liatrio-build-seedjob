@@ -24,6 +24,31 @@ folder = folder("pipelineJobs") {
     permission('hudson.model.Item.Discover:administrators')
     permission('hudson.model.Run.Update:administrators')
   }
+  properties {
+    folderLibraries {
+        libraries {
+            libraryConfiguration {
+                name('example_sharing')
+                retriever {
+                    modernSCM {
+                        scm {
+                            git {
+                                id('73a88996-5cc1-4624-8fb5-8a148776e26e')
+                                remote('https://github.com/liatrio/pipeline-library.git')
+                                credentialsId('')
+                                remoteName('pipeline-library')
+                                rawRefSpecs('+refs/heads/*:refs/remotes/origin/*')
+                                includes('*')
+                                excludes('')
+                                ignoreOnPushNotifications(false)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+  }
 }
 
 
@@ -36,12 +61,7 @@ repos.each { repo->
     definition {
       cpsScm {
         scm {
-          git{
-            remote {
-              url(repo)
-            }
-            branch(branch)
-          }
+          git(repo, branch, null)
         }
         scriptPath('Jenkinsfile')
       }
