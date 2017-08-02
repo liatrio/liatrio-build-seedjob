@@ -54,14 +54,15 @@ folder = folder("pipelineJobs") {
 
 def repos = readFileFromWorkspace("repos.txt").split()
 
-repos.each { repo->
-  def jobName = repo.split("/")[4].replaceAll(".git", "")
-  def branch = repo.split("/")[5]
+repos.eachLine { repo->
+  def jobName = repo.split("#")[0].split("/")[4].replaceAll(".git", "")
+  def branch = repo.split("#")[1]
+  def url = repo.split("#")[0]
   pipelineJob("pipelineJobs/${jobName}"){
     definition {
       cpsScm {
         scm {
-          git(repo, branch, null)
+          git(url, branch, null)
         }
         scriptPath('Jenkinsfile')
       }
