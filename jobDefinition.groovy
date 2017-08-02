@@ -52,9 +52,9 @@ folder = folder("pipelineJobs") {
 }
 
 
-def repos = readFileFromWorkspace("repos.txt").split()
+def repos = readFileFromWorkspace("repos.txt")
 
-repos.eachLine { repo->
+repos.split("\n").each { repo->
   def jobName = repo.split("#")[0].split("/")[4].replaceAll(".git", "")
   def branch = repo.split("#")[1]
   def url = repo.split("#")[0]
