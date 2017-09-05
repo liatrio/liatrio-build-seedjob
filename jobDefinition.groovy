@@ -40,6 +40,20 @@ folder = folder("pipelineJobs") {
                     }
                 }
             }
+          libraryConfiguration {
+                name('ldop-shared-library')
+                defaultVersion('master')
+                loadImplicitly
+                retriever {
+                    modernSCM {
+                        scm {
+                            git {
+                                remote('https://github.com/liatrio/ldop-shared-library.git')
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
   }
