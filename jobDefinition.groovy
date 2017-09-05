@@ -27,19 +27,6 @@ folder = folder("pipelineJobs") {
   properties {
     folderLibraries {
         libraries {
-            libraryConfiguration {
-                name('example_sharing')
-                defaultVersion('master')
-                retriever {
-                    modernSCM {
-                        scm {
-                            git {
-                                remote('https://github.com/liatrio/pipeline-library.git')
-                            }
-                        }
-                    }
-                }
-            }
           libraryConfiguration {
                 name('ldop-shared-library')
                 defaultVersion('master')
