@@ -33,7 +33,6 @@ folder = folder("pipelineJobs") {
                     modernSCM {
                         scm {
                             git {
-                                id('73a88996-5cc1-4624-8fb5-8a148776e26e')
                                 remote('https://github.com/liatrio/pipeline-library.git')
                             }
                         }
