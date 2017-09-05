@@ -43,7 +43,7 @@ folder = folder("pipelineJobs") {
           libraryConfiguration {
                 name('ldop-shared-library')
                 defaultVersion('master')
-                implicitLoad(true)
+                implicit(true)
                 retriever {
                     modernSCM {
                         scm {
