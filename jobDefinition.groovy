@@ -29,6 +29,7 @@ folder = folder("pipelineJobs") {
         libraries {
             libraryConfiguration {
                 name('example_sharing')
+                defaultVersion('master')
                 retriever {
                     modernSCM {
                         scm {
