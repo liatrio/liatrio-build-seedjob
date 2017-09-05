@@ -35,12 +35,6 @@ folder = folder("pipelineJobs") {
                             git {
                                 id('73a88996-5cc1-4624-8fb5-8a148776e26e')
                                 remote('https://github.com/liatrio/pipeline-library.git')
-                                credentialsId('')
-                                rawRefSpecs('+refs/heads/*:refs/remotes/origin/*')
-                                includes('*')
-                                excludes('')
-                                ignoreOnPushNotifications(false)
-                            }
                         }
                     }
                 }
