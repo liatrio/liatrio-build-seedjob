@@ -20,24 +20,25 @@ def repos = [
 def pipelineJobFolder = folder("pipelineJobs")
 repos.each {
     repo ->
-    def jobName = repo.url.split("#")[0].split("/")[4].replaceAll(".git", "")
-    multibranchPipelineJob("pipelineJobs/${jobName}") {
-        branchSources {
-            git{
-                remote(repo.url)
-            }
-        }
-        configure {
-                it / factory {
-                    scriptPath(repo[jenkinsEnvironment])
+        def jobName = repo.url.split("#")[0].split("/")[4].replaceAll(".git", "")
+        def jenkinsfileLocation = jenkinsEnvironment == 'prod' ? repo.prod : repo.default
+        multibranchPipelineJob("pipelineJobs/${jobName}") {
+            branchSources {
+                git{
+                    remote(repo.url)
                 }
-        }
-        orphanedItemStrategy {
-            discardOldItems {
-                daysToKeep(1)
+            }
+            configure {
+                    it / factory {
+                        scriptPath(jenkinsfileLocation)
+                    }
+            }
+            orphanedItemStrategy {
+                discardOldItems {
+                    daysToKeep(1)
+                }
             }
         }
-    }
 }
 pipelineJobFolder.with {
   authorization {
