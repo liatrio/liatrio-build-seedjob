@@ -32,7 +32,6 @@ repos.each {
                     scriptPath(repo[jenkinsEnvironment])
                 }
         }
-
         orphanedItemStrategy {
             discardOldItems {
                 daysToKeep(1)
