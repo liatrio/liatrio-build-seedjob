@@ -10,11 +10,11 @@ catch (e) {
 }
 
 def repos = [
-    [ url: "https://github.com/liatrio/libotrio.git", prod: "jenkinsfile" , default: "jenkinsfile" ],
-    [ url: "https://github.com/liatrio/spring-petclinic.git", prod: "jenkinsfile/full-demo", default: "jenkinsfile"],
-    [ url: "https://github.com/liatrio/game-of-life.git", prod: "jenkinsfile", default: "jenkinsfile"],
-    [ url: "https://github.com/liatrio/joda-time.git", prod: "jenkinsfile", default: "jenkinsfile"],
-    [ url: "https://github.com/liatrio/dromedary", prod: "jenkinsfile", default: "jenkinsfile"],
+    [ url: "https://github.com/liatrio/libotrio.git", prod: "Jenkinsfile" , default: "Jenkinsfile" ],
+    [ url: "https://github.com/liatrio/spring-petclinic.git", prod: "jenkinsfile/full-demo", default: "Jenkinsfile"],
+    [ url: "https://github.com/liatrio/game-of-life.git", prod: "Jenkinsfile", default: "Jenkinsfile"],
+    [ url: "https://github.com/liatrio/joda-time.git", prod: "Jenkinsfile", default: "Jenkinsfile"],
+    [ url: "https://github.com/liatrio/dromedary", prod: "Jenkinsfile", default: "Jenkinsfile"],
 ]
 
 def pipelineJobFolder = folder("pipelineJobs")
