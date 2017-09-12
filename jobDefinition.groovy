@@ -1,4 +1,49 @@
-folder = folder("pipelineJobs") {
+def jenkinsEnvironment = 'default'
+
+try {
+    if ( environment )
+        jenkinsEnvironment = environment
+    println "Using production jenkinsfiles"
+}
+catch (e) {
+    println "Using default jenkinsfiles"
+}
+
+def repos = [
+    [ url: "https://github.com/liatrio/libotrio.git", prod: "Jenkinsfile" , default: "Jenkinsfile" ],
+    [ url: "https://github.com/liatrio/spring-petclinic.git", prod: "jenkinsfile/full-demo", default: "Jenkinsfile"],
+    [ url: "https://github.com/liatrio/game-of-life.git", prod: "Jenkinsfile", default: "Jenkinsfile"],
+    [ url: "https://github.com/liatrio/joda-time.git", prod: "Jenkinsfile", default: "Jenkinsfile"],
+    [ url: "https://github.com/liatrio/dromedary", prod: "Jenkinsfile", default: "Jenkinsfile"],
+]
+
+def pipelineJobFolder = folder("pipelineJobs")
+repos.each {
+    repo ->
+        def jobName = repo.url.split("#")[0].split("/")[4].replaceAll(".git", "")
+        def jenkinsfileLocation = jenkinsEnvironment == 'prod' ? repo.prod : repo.default
+        multibranchPipelineJob("pipelineJobs/${jobName}") {
+            branchSources {
+                git{
+                    remote(repo.url)
+                }
+            }
+            configure {
+                    it / factory {
+                        scriptPath(jenkinsfileLocation)
+                    }
+            }
+            orphanedItemStrategy {
+                discardOldItems {
+                    daysToKeep(1)
+                }
+            }
+            triggers {
+                periodic(2)
+            }
+        }
+}
+pipelineJobFolder.with {
   authorization {
     permission('hudson.model.View.Delete:administrators')
     permission('com.cloudbees.plugins.credentials.CredentialsProvider.Update:administrators')
@@ -42,25 +87,6 @@ folder = folder("pipelineJobs") {
                 }
             }
         }
-    }
-  }
-}
-
-
-def repos = readFileFromWorkspace("repos.txt")
-
-repos.split("\n").each { repo->
-  def jobName = repo.split("#")[0].split("/")[4].replaceAll(".git", "")
-  def branch = repo.split("#")[1]
-  def url = repo.split("#")[0]
-  pipelineJob("pipelineJobs/${jobName}"){
-    definition {
-      cpsScm {
-        scm {
-          git(url, branch, null)
-        }
-        scriptPath('Jenkinsfile')
-      }
     }
   }
 }
