@@ -38,6 +38,9 @@ repos.each {
                     daysToKeep(1)
                 }
             }
+            triggers {
+                periodic(2)
+            }
         }
 }
 pipelineJobFolder.with {
