@@ -11,7 +11,7 @@ catch (e) {
 
 def repos = [
     [ url: "https://github.com/liatrio/libotrio.git", prod: "Jenkinsfile" , default: "Jenkinsfile" ],
-    [ url: "https://github.com/liatrio/spring-petclinic.git", prod: "jenkinsfile/full-demo", default: "Jenkinsfile"],
+    [ url: "https://github.com/liatrio/spring-petclinic.git", prod: "jenkinsfiles/full-demo", default: "Jenkinsfile"],
     [ url: "https://github.com/liatrio/game-of-life.git", prod: "Jenkinsfile", default: "Jenkinsfile"],
     [ url: "https://github.com/liatrio/joda-time.git", prod: "Jenkinsfile", default: "Jenkinsfile"],
     [ url: "https://github.com/liatrio/dromedary", prod: "Jenkinsfile", default: "Jenkinsfile"],
