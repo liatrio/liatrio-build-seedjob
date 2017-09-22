@@ -9,40 +9,8 @@ catch (e) {
     println "Using default jenkinsfiles"
 }
 
-def repos = [
-    [ url: "https://github.com/liatrio/libotrio.git", prod: "Jenkinsfile" , default: "Jenkinsfile" ],
-    [ url: "https://github.com/liatrio/spring-petclinic.git", prod: "jenkinsfiles/full-demo", default: "Jenkinsfile"],
-    [ url: "https://github.com/liatrio/game-of-life.git", prod: "Jenkinsfile", default: "Jenkinsfile"],
-    [ url: "https://github.com/liatrio/joda-time.git", prod: "Jenkinsfile", default: "Jenkinsfile"],
-    [ url: "https://github.com/liatrio/dromedary", prod: "Jenkinsfile", default: "Jenkinsfile"],
-]
 
-def pipelineJobFolder = folder("pipelineJobs")
-repos.each {
-    repo ->
-        def jobName = repo.url.split("#")[0].split("/")[4].replaceAll(".git", "")
-        def jenkinsfileLocation = jenkinsEnvironment == 'prod' ? repo.prod : repo.default
-        multibranchPipelineJob("pipelineJobs/${jobName}") {
-            branchSources {
-                git{
-                    remote(repo.url)
-                }
-            }
-            configure {
-                    it / factory {
-                        scriptPath(jenkinsfileLocation)
-                    }
-            }
-            orphanedItemStrategy {
-                discardOldItems {
-                    daysToKeep(1)
-                }
-            }
-            triggers {
-                periodic(2)
-            }
-        }
-}
+def pipelineJobFolder = organizationFolder("Liatrio")
 pipelineJobFolder.with {
   authorization {
     permission('hudson.model.View.Delete:administrators')
@@ -69,6 +37,14 @@ pipelineJobFolder.with {
     permission('hudson.model.Item.Discover:administrators')
     permission('hudson.model.Run.Update:administrators')
   }
+
+  organizations {
+    github {
+      repoOwner('Liatrio')
+      scanCredentialsId('Github Creds')
+    }
+  }
+
   properties {
     folderLibraries {
         libraries {
