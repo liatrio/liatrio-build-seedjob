@@ -9,40 +9,8 @@ catch (e) {
     println "Using default jenkinsfiles"
 }
 
-def repos = [
-    [ url: "https://github.com/liatrio/libotrio.git", prod: "Jenkinsfile" , default: "Jenkinsfile" ],
-    [ url: "https://github.com/liatrio/spring-petclinic.git", prod: "jenkinsfiles/full-demo", default: "Jenkinsfile"],
-    [ url: "https://github.com/liatrio/game-of-life.git", prod: "Jenkinsfile", default: "Jenkinsfile"],
-    [ url: "https://github.com/liatrio/joda-time.git", prod: "Jenkinsfile", default: "Jenkinsfile"],
-    [ url: "https://github.com/liatrio/dromedary", prod: "Jenkinsfile", default: "Jenkinsfile"],
-]
+def pipelineJobFolder = organizationFolder("Liatrio")
 
-def pipelineJobFolder = folder("pipelineJobs")
-repos.each {
-    repo ->
-        def jobName = repo.url.split("#")[0].split("/")[4].replaceAll(".git", "")
-        def jenkinsfileLocation = jenkinsEnvironment == 'prod' ? repo.prod : repo.default
-        multibranchPipelineJob("pipelineJobs/${jobName}") {
-            branchSources {
-                git{
-                    remote(repo.url)
-                }
-            }
-            configure {
-                    it / factory {
-                        scriptPath(jenkinsfileLocation)
-                    }
-            }
-            orphanedItemStrategy {
-                discardOldItems {
-                    daysToKeep(1)
-                }
-            }
-            triggers {
-                periodic(2)
-            }
-        }
-}
 pipelineJobFolder.with {
   authorization {
     permission('hudson.model.View.Delete:administrators')
@@ -68,6 +36,36 @@ pipelineJobFolder.with {
     permission('hudson.model.Item.Move:administrators')
     permission('hudson.model.Item.Discover:administrators')
     permission('hudson.model.Run.Update:administrators')
+  }
+
+  organizations {
+    github {
+      repoOwner('Liatrio')
+      scanCredentialsId('Github Creds')
+      triggers {
+        periodic(5)
+      }
+    }
+  }
+  configure { node->
+    def traits = node / navigators / 'org.jenkinsci.plugins.github__branch__source.GitHubSCMNavigator' / traits
+    traits << 'jenkins.scm.impl.trait.WildcardSCMSourceFilterTrait' {
+      includes('spring-petclinic game-of-life')
+    }
+    traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
+      strategyId('1')
+    }
+    traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
+      strategyId('1')
+    }
+    traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
+      strategyId('1')
+    }
+  }
+  orphanedItemStrategy {
+    discardOldItems {
+      daysToKeep(1)
+    }
   }
   properties {
     folderLibraries {
