@@ -9,8 +9,8 @@ catch (e) {
     println "Using default jenkinsfiles"
 }
 
-
 def pipelineJobFolder = organizationFolder("Liatrio")
+
 pipelineJobFolder.with {
   authorization {
     permission('hudson.model.View.Delete:administrators')
@@ -42,9 +42,31 @@ pipelineJobFolder.with {
     github {
       repoOwner('Liatrio')
       scanCredentialsId('Github Creds')
+      triggers {
+        periodic(5)
+      }
     }
   }
-
+  configure { node->
+    def traits = node / navigators / 'org.jenkinsci.plugins.github__branch__source.GitHubSCMNavigator' / traits
+    traits << 'jenkins.scm.impl.trait.WildcardSCMSourceFilterTrait' {
+      includes('spring-petclinic game-of-life')
+    }
+    traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
+      strategyId('1')
+    }
+    traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
+      strategyId('1')
+    }
+    traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
+      strategyId('1')
+    }
+  }
+  orphanedItemStrategy {
+    discardOldItems {
+      daysToKeep(1)
+    }
+  }
   properties {
     folderLibraries {
         libraries {
